@@ -287,3 +287,5 @@ plt.title('Loss VS Val_loss')
 model.load_weights('./h5/500-GCN')
 result = model.evaluate(x_test, y_test)
 print(result)
+
+#pushing fork
