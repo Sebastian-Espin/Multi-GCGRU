@@ -7,19 +7,70 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import yfinance as yf
+
+
 ### Data Process
 '''
 T,I,S: adjacency matrix of Topicality Graph, Industry Graph, Shareholder Graph
 '''
-path = "xx/CSI500-concept.xlsx"
-T = pd.read_excel(path, index_col=0).values
-path = "xx/CSI500-industry.xlsx"
-I = pd.read_excel(path, index_col=0).values
-path = "xx/CSI500-shareholder.xlsx"
-S = pd.read_excel(path, index_col=0).values
-print(T.shape, I.shape, S.shape) #(N,N)
-Fixed_Matrices = [S,I,T]
+# path = "data/raw data/CSI500 concepts.csv"
+# #T = pd.read_excel(path, index_col=0).values
+# T = pd.read_excel(path, index_col=0, engine='openpyxl').values
 
+# path = "data/raw data/CSI500 industry.csv"
+# #I = pd.read_excel(path, index_col=0).values
+# I = pd.read_excel(path, index_col=0, engine='openpyxl').values
+# path = "data/raw data/CSI500 shareholders.csv"
+# #S = pd.read_excel(path, index_col=0).values
+# S = pd.read_excel(path, index_col=0, engine='openpyxl').values
+# T = pd.read_csv("data/raw data/CSI500 concepts.csv", index_col=0, encoding="ISO-8859-1", sep="\t", engine="python", on_bad_lines='skip')
+# I = pd.read_csv("data/raw data/CSI500 industry.csv", index_col=0, encoding="ISO-8859-1", sep="\t", engine="python", on_bad_lines='skip')
+# S = pd.read_csv("data/raw data/CSI500 shareholders.csv", index_col=0, encoding="ISO-8859-1", sep="\t", engine="python", on_bad_lines='skip')
+
+
+# T = T.select_dtypes(include=[np.number]).values
+# I = I.select_dtypes(include=[np.number]).values
+# S = S.select_dtypes(include=[np.number]).values
+
+# print(T.shape, I.shape, S.shape) #(N,N)
+# Fixed_Matrices = [S,I,T]
+
+# Liste de tickers d'exemple
+tickers = ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META']
+
+#OKOKOKOKOKOKOKOKOKOKOKOK
+
+# Télécharger les prix ajustés
+data = yf.download(tickers, start='2023-01-01', end='2024-01-01')['Close']
+returns = data.pct_change().dropna()
+
+# Matrice de corrélation des rendements
+correlation_matrix = returns.corr().values
+T = np.array(correlation_matrix)
+
+# Récupérer le secteur de chaque entreprise
+sectors = []
+for ticker in tickers:
+    try:
+        info = yf.Ticker(ticker).info
+        sectors.append(info.get('sector', 'Unknown'))
+    except:
+        sectors.append('Unknown')  # fallback au cas où un appel échoue
+
+# Matrice binaire d'industrie
+industry_matrix = [[1 if sectors[i] == sectors[j] else 0 for j in range(len(tickers))] for i in range(len(tickers))]
+I = np.array(industry_matrix)
+
+# Matrice d'identité simulée pour "shareholders"
+S = np.identity(len(tickers))
+
+# Impression des formes
+print("T:", T.shape)
+print("I:", I.shape)
+print("S:", S.shape)
+
+Fixed_Matrices = [S,I,T]
 '''
 samples: the input data
 lables: the labels of input data
@@ -29,6 +80,10 @@ N: the number of related stocks
 F: the number of stock features
 We use random data as an example and our reader can use their own data
 '''
+M = 1000
+P = 10
+N = T.shape[0]
+F = 8
 samples = np.random.normal(size=(M, P, N, F))
 labels = np.random.normal(size=(M, N))
 
@@ -101,7 +156,7 @@ class GCGRU(tf.keras.Model):
                                 initializer=tf.keras.initializers.get(kernel_initializer),
                                 trainable=True)
             self.w_gcn.append(w)
-            b = self.add_weight('b_GCN',shape=(aft,),
+            b = self.add_weight(name='b_GCN',shape=(aft,),
                                 initializer=tf.keras.initializers.get(bias_initializer),
                                 trainable=True)
             self.b_gcn.append(b)
@@ -264,7 +319,7 @@ model.build(input_shape=(None, P, N, F))
 model.summary()
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=[tf.keras.metrics.BinaryAccuracy()])
 model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
-    filepath = './h5/500-GCGRU',
+    filepath = './h5/500-GCGRU.weights.h5',
     monitor ='val_binary_accuracy',
     save_weights_only = True,
     save_best_only = True)
@@ -282,10 +337,11 @@ plt.plot(E, loss,'b-',label='loss')
 plt.plot(E, val_loss,'r-',label='val_loss')
 plt.legend()
 plt.title('Loss VS Val_loss')
+plt.show()
 
 # Prediction
-model.load_weights('./h5/500-GCN')
+#model.load_weights('./h5/500-GCN.weights.h5')
+model.load_weights('./h5/500-GCGRU.weights.h5')
+
 result = model.evaluate(x_test, y_test)
 print(result)
-
-#pushing fork
