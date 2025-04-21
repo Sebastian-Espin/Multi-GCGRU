@@ -1,42 +1,42 @@
 symbol,shortName,currentPrice,sector,marketCap
-AAPL,Apple Inc.,191.15,Technology,2871324311552
-AMD,"Advanced Micro Devices, Inc.",84.93,Technology,137979822080
-AMT,American Tower Corporation (REI,216.36,Real Estate,101282013184
-AMZN,"Amazon.com, Inc.",166.18,Consumer Cyclical,1763568517120
-BA,Boeing Company (The),157.64,Industrials,118609436672
-BAC,Bank of America Corporation,36.7,Financial Services,277454946304
-CAT,"Caterpillar, Inc.",283.52,Industrials,135503273984
-COST,Costco Wholesale Corporation,947.99,Consumer Defensive,420607066112
-CVS,CVS Health Corporation,64.995,Healthcare,82048393216
-DIS,Walt Disney Company (The),83.7987,Communication Services,151490445312
-FDX,FedEx Corporation,203.7375,Industrials,48815304704
-GM,General Motors Company,44.17,Consumer Cyclical,43949236224
-GOOGL,Alphabet Inc.,146.86,Communication Services,1801972219904
-GS,"Goldman Sachs Group, Inc. (The)",499.43,Financial Services,155217854464
-HD,"Home Depot, Inc. (The)",344.48,Consumer Cyclical,342388342784
-INTC,Intel Corporation,18.615,Technology,81172381696
-JNJ,Johnson & Johnson,156.24,Healthcare,376515002368
-JPM,JP Morgan Chase & Co.,227.79,Financial Services,633051152384
-KO,Coca-Cola Company (The),72.275,Consumer Defensive,311040507904
-MA,Mastercard Incorporated,506.56,Financial Services,461834813440
-META,"Meta Platforms, Inc.",484.4,Communication Services,1227304861696
-MS,Morgan Stanley,105.7088,Financial Services,169874046976
-MSFT,Microsoft Corporation,357.7,Technology,2659134734336
-NEE,"NextEra Energy, Inc.",63.839,Utilities,131417686016
-NFLX,"Netflix, Inc.",989.45,Communication Services,423171522560
-NVDA,NVIDIA Corporation,95.795,Technology,2337397800960
-ORCL,Oracle Corporation,122.405,Technology,343251746816
-PFE,"Pfizer, Inc.",21.9503,Healthcare,124490031104
-PG,Procter & Gamble Company (The),165.31,Consumer Defensive,387627122688
-PLD,"Prologis, Inc.",97.305,Real Estate,90199498752
-T,AT&T Inc.,26.25,Communication Services,189019422720
-TGT,Target Corporation,92.96,Consumer Defensive,42350346240
-TSLA,"Tesla, Inc.",225.0,Consumer Cyclical,723716997120
-UNH,UnitedHealth Group Incorporated,428.18,Healthcare,391661387776
-UPS,"United Parcel Service, Inc.",95.82,Industrials,81210515456
-V,Visa Inc.,318.6475,Financial Services,614674202624
-VZ,Verizon Communications Inc.,42.8799,Communication Services,183954767872
-WBA,"Walgreens Boots Alliance, Inc.",10.85,Healthcare,9382407168
-WFC,Wells Fargo & Company,63.795,Financial Services,208078880768
-WMT,Walmart Inc.,91.87,Consumer Defensive,736508051456
-XOM,Exxon Mobil Corporation,104.665,Energy,452706467840
+AAPL,Apple Inc.,191.35,Technology,2874478952448
+AMD,"Advanced Micro Devices, Inc.",84.8489,Technology,137848061952
+AMT,American Tower Corporation (REI,216.41,Real Estate,101305417728
+AMZN,"Amazon.com, Inc.",166.0212,Consumer Cyclical,1761870741504
+BA,Boeing Company (The),157.8549,Industrials,118771130368
+BAC,Bank of America Corporation,36.645,Financial Services,277039120384
+CAT,"Caterpillar, Inc.",283.51,Industrials,135498506240
+COST,Costco Wholesale Corporation,950.48,Consumer Defensive,421711806464
+CVS,CVS Health Corporation,64.95,Healthcare,81991581696
+DIS,Walt Disney Company (The),83.95,Communication Services,151763959808
+FDX,FedEx Corporation,204.02,Industrials,48882991104
+GM,General Motors Company,44.145,Consumer Cyclical,43924361216
+GOOGL,Alphabet Inc.,146.93,Communication Services,1802856824832
+GS,"Goldman Sachs Group, Inc. (The)",499.615,Financial Services,155275345920
+HD,"Home Depot, Inc. (The)",344.47,Consumer Cyclical,342378381312
+INTC,Intel Corporation,18.65,Technology,81324998656
+JNJ,Johnson & Johnson,156.1,Healthcare,376177623040
+JPM,JP Morgan Chase & Co.,227.41,Financial Services,631995105280
+KO,Coca-Cola Company (The),72.265,Consumer Defensive,310997483520
+MA,Mastercard Incorporated,506.51,Financial Services,461789233152
+META,"Meta Platforms, Inc.",484.46,Communication Services,1227456905216
+MS,Morgan Stanley,105.66,Financial Services,169795633152
+MSFT,Microsoft Corporation,357.615,Technology,2658502705152
+NEE,"NextEra Energy, Inc.",63.97,Utilities,131687366656
+NFLX,"Netflix, Inc.",990.1077,Communication Services,423525515264
+NVDA,NVIDIA Corporation,95.79,Technology,2337031847936
+ORCL,Oracle Corporation,122.3834,Technology,343191191552
+PFE,"Pfizer, Inc.",21.9275,Healthcare,124360720384
+PG,Procter & Gamble Company (The),165.285,Consumer Defensive,387509878784
+PLD,"Prologis, Inc.",97.31,Real Estate,90204135424
+T,AT&T Inc.,26.175,Communication Services,188479356928
+TGT,Target Corporation,93.13,Consumer Defensive,42427793408
+TSLA,"Tesla, Inc.",224.975,Consumer Cyclical,723636584448
+UNH,UnitedHealth Group Incorporated,428.2,Healthcare,391679705088
+UPS,"United Parcel Service, Inc.",95.78,Industrials,81176616960
+V,Visa Inc.,318.49,Financial Services,614370377728
+VZ,Verizon Communications Inc.,42.8,Communication Services,183590535168
+WBA,"Walgreens Boots Alliance, Inc.",10.845,Healthcare,9378083840
+WFC,Wells Fargo & Company,63.76,Financial Services,207964717056
+WMT,Walmart Inc.,91.96,Consumer Defensive,737229537280
+XOM,Exxon Mobil Corporation,104.59,Energy,452382064640
