@@ -9,28 +9,79 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 
-### Data Process
-'''
-T,I,S: adjacency matrix of Topicality Graph, Industry Graph, Shareholder Graph
-'''
-path = "data/assets/business_relationship_graph.csv"
-#T = pd.read_excel(path, index_col=0).values
-T = pd.read_csv(path, index_col=0).values
+# =================================================================================
+# 1) CHEMINS VERS TES FICHIERS  (adapte si besoin)
+# =================================================================================
+XL_CONCEPT  = "data/raw data/CSI500 concepts.xlsx"      # colonnes : Source | Target | …
+XL_INDUSTRY = "data/raw data/CSI500 industry.xlsx"      # colonnes : symbol | sector
+XL_HOLDER   = "data/raw data/CSI500 shareholders.xlsx"  # colonnes : Ticker | Stockholder
 
-path = "data/assets/american_industry.csv"
-#I = pd.read_excel(path, index_col=0).values
-I = pd.read_csv(path, index_col=0).values
+# ────────────────────────────────────────────────────────────────
+# 1) Lire les feuilles
+# ────────────────────────────────────────────────────────────────
+concept_df  = pd.read_excel(XL_CONCEPT,  usecols=["concept_name","ts_code"])
+industry_df = pd.read_excel(XL_INDUSTRY, usecols=["ts_code","industry"])
+holder_df   = pd.read_excel(XL_HOLDER,   usecols=["ts_code","holder_name"])
 
-path = "data/assets/yahoo_finance_shareholders.csv"
-#S = pd.read_excel(path, index_col=0).values
-S = pd.read_csv(path, index_col=0).values
+# ────────────────────────────────────────────────────────────────
+# 2) Liste commune de tickers et mapping -> indice
+# ────────────────────────────────────────────────────────────────
+tickers = sorted(set(concept_df["ts_code"]) |
+                 set(industry_df["ts_code"]) |
+                 set(holder_df["ts_code"]))
+idx = {t:i for i,t in enumerate(tickers)}
+N   = len(tickers)
 
-# Impression des formes
-print("T:", T.shape)
-print("I:", I.shape)
-print("S:", S.shape)
+# helper pour initialiser matrice
+def empty_mat(): return np.zeros((N,N), dtype=np.float32)
 
-Fixed_Matrices = [S,I,T]
+# ────────────────────────────────────────────────────────────────
+# 3‑A) Matrice **T** : titres qui partagent ≥1 concept
+# ────────────────────────────────────────────────────────────────
+T = empty_mat()
+for concept, group in concept_df.groupby("concept_name"):
+    ids = [idx[t] for t in group["ts_code"] if t in idx]
+    for i in ids:
+        T[i, ids] += 1.0      # +1 par concept partagé
+np.fill_diagonal(T, 0)
+
+# ────────────────────────────────────────────────────────────────
+# 3‑B) Matrice **I** : titres dans la même industrie
+# ────────────────────────────────────────────────────────────────
+I = empty_mat()
+for indus, group in industry_df.groupby("industry"):
+    ids = [idx[t] for t in group["ts_code"] if t in idx]
+    for i in ids:
+        I[i, ids] = 1.0
+np.fill_diagonal(I, 0)
+
+# ────────────────────────────────────────────────────────────────
+# 3‑C) Matrice **S** : actionnaires communs
+# ────────────────────────────────────────────────────────────────
+S = empty_mat()
+for holder, group in holder_df.groupby("holder_name"):
+    ids = [idx[t] for t in group["ts_code"] if t in idx]
+    for i in ids:
+        S[i, ids] += 1.0      # +1 par actionnaire commun
+np.fill_diagonal(S, 0)
+
+print("T:", T.shape, "I:", I.shape, "S:", S.shape)
+
+# ────────────────────────────────────────────────────────────────
+# 4) Normalisation GCN
+# ────────────────────────────────────────────────────────────────
+def gcn_norm(A):
+    A = A + np.eye(A.shape[0], dtype=np.float32)
+    d = A.sum(1)
+    D = np.diag(np.power(d, -0.5, where=d>0))
+    return D @ A @ D
+
+Fixed_Matrices = [
+    tf.constant(gcn_norm(S), dtype=tf.float32),
+    tf.constant(gcn_norm(I), dtype=tf.float32),
+    tf.constant(gcn_norm(T), dtype=tf.float32),
+]
+
 '''
 samples: the input data
 lables: the labels of input data
@@ -284,7 +335,7 @@ model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
     save_best_only = True)
 
 
-Epochs = 1000
+Epochs = 20
 Batch_size =32
 History = model.fit(x_train, y_train, batch_size=Batch_size, epochs=Epochs, callbacks=[model_checkpoint], validation_data=(x_val, y_val))
 
