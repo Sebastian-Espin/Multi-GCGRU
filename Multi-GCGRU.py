@@ -6,64 +6,24 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-import yfinance as yf
+from sklearn.model_selection import train_test_split
 
 
 ### Data Process
 '''
 T,I,S: adjacency matrix of Topicality Graph, Industry Graph, Shareholder Graph
 '''
-# path = "data/raw data/CSI500 concepts.csv"
-# #T = pd.read_excel(path, index_col=0).values
-# T = pd.read_excel(path, index_col=0, engine='openpyxl').values
+path = "data/assets/business_relationship_graph.csv"
+#T = pd.read_excel(path, index_col=0).values
+T = pd.read_csv(path, index_col=0).values
 
-# path = "data/raw data/CSI500 industry.csv"
-# #I = pd.read_excel(path, index_col=0).values
-# I = pd.read_excel(path, index_col=0, engine='openpyxl').values
-# path = "data/raw data/CSI500 shareholders.csv"
-# #S = pd.read_excel(path, index_col=0).values
-# S = pd.read_excel(path, index_col=0, engine='openpyxl').values
-# T = pd.read_csv("data/raw data/CSI500 concepts.csv", index_col=0, encoding="ISO-8859-1", sep="\t", engine="python", on_bad_lines='skip')
-# I = pd.read_csv("data/raw data/CSI500 industry.csv", index_col=0, encoding="ISO-8859-1", sep="\t", engine="python", on_bad_lines='skip')
-# S = pd.read_csv("data/raw data/CSI500 shareholders.csv", index_col=0, encoding="ISO-8859-1", sep="\t", engine="python", on_bad_lines='skip')
+path = "data/assets/american_industry.csv"
+#I = pd.read_excel(path, index_col=0).values
+I = pd.read_csv(path, index_col=0).values
 
-
-# T = T.select_dtypes(include=[np.number]).values
-# I = I.select_dtypes(include=[np.number]).values
-# S = S.select_dtypes(include=[np.number]).values
-
-# print(T.shape, I.shape, S.shape) #(N,N)
-# Fixed_Matrices = [S,I,T]
-
-# Liste de tickers d'exemple
-tickers = ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META']
-
-#OKOKOKOKOKOKOKOKOKOKOKOK
-
-# Télécharger les prix ajustés
-data = yf.download(tickers, start='2023-01-01', end='2024-01-01')['Close']
-returns = data.pct_change().dropna()
-
-# Matrice de corrélation des rendements
-correlation_matrix = returns.corr().values
-T = np.array(correlation_matrix)
-
-# Récupérer le secteur de chaque entreprise
-sectors = []
-for ticker in tickers:
-    try:
-        info = yf.Ticker(ticker).info
-        sectors.append(info.get('sector', 'Unknown'))
-    except:
-        sectors.append('Unknown')  # fallback au cas où un appel échoue
-
-# Matrice binaire d'industrie
-industry_matrix = [[1 if sectors[i] == sectors[j] else 0 for j in range(len(tickers))] for i in range(len(tickers))]
-I = np.array(industry_matrix)
-
-# Matrice d'identité simulée pour "shareholders"
-S = np.identity(len(tickers))
+path = "data/assets/yahoo_finance_shareholders.csv"
+#S = pd.read_excel(path, index_col=0).values
+S = pd.read_csv(path, index_col=0).values
 
 # Impression des formes
 print("T:", T.shape)
@@ -92,7 +52,6 @@ train set = 70%, test set=20%, val set=10%
 '''
 TEST_SIZE = 0.3 # the test and val size of dataset
 RANDOM_STATE = 5
-from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(samples, labels, test_size=TEST_SIZE, random_state=RANDOM_STATE)
 x_test, x_val, y_test, y_val = train_test_split(x_test, y_test, test_size=0.33, random_state=RANDOM_STATE)
 print(x_train.shape, y_train.shape)
@@ -340,7 +299,7 @@ plt.title('Loss VS Val_loss')
 plt.show()
 
 # Prediction
-#model.load_weights('./h5/500-GCN.weights.h5')
+model.load_weights('./h5/500-GCN.weights.h5')
 model.load_weights('./h5/500-GCGRU.weights.h5')
 
 result = model.evaluate(x_test, y_test)
