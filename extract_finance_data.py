@@ -6,8 +6,8 @@ import yfinance as yf
 
 # ──────────────────────────── USER SETTINGS ────────────────────────────────
 INPUT_CSV       = Path("data/assets/business_relationship_graph.csv")          # ORIGINAL FILE
-INFO_CSV        = Path("american_industry.csv")                  # FUNDAMENTALS
-YF_SHARE_CSV    = Path("yahoo_finance_shareholders.csv")  # HOLDERS
+INFO_CSV        = Path("data/assets/american_industry.csv")                  # FUNDAMENTALS
+YF_SHARE_CSV    = Path("data/assets/yahoo_finance_shareholders.csv")  # HOLDERS
 # ────────────────────────────────────────────────────────────────────────────
 
 # 1. ── Load data ───────────────────────────────────────────────────────────
